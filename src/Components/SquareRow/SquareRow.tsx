@@ -5,13 +5,20 @@ import Square from "../Square/Square";
 
 interface Props {
   row: ModelSquareRow;
+  rowIndex: number;
 }
 
-const SquareRow = ({ row }: Props) => {
+const SquareRow = ({ row, rowIndex }: Props) => {
   return (
     <div className="SquareRow">
-      {row.map((square) => (
-        <Square content={square.content} uncoveredState={square.state} />
+      {row.map((square, index) => (
+        <Square
+          key={index}
+          content={square.content}
+          uncoveredState={square.state}
+          rowIndex={rowIndex}
+          colIndex={index}
+        />
       ))}
     </div>
   );

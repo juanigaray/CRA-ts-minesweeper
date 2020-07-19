@@ -21,8 +21,8 @@ function randomEnum<T>(anEnum: T): T[keyof T] {
 }
 
 const getRandomSquare = (): Square => ({
-  content: SquareContent.Nothing,
-  state: randomEnum(SquareState),
+  content: randomEnum(SquareContent),
+  state: SquareState.Unclicked,
 });
 
 const getRandomRow = (): SquareRow => {

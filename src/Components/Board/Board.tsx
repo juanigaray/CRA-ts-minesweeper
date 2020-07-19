@@ -1,10 +1,7 @@
 import React from "react";
 import "./Board.scss";
 import { selectors } from "../../Redux/reducers/board/board";
-import {
-  BoardState,
-  SquareMatrix,
-} from "../../Redux/reducers/board/board-interfaces";
+import { SquareMatrix } from "../../Redux/reducers/board/board-interfaces";
 import { connect } from "react-redux";
 import SquareRow from "../SquareRow/SquareRow";
 import { AppState } from "../../Redux/AppState";
@@ -20,8 +17,8 @@ const mapStateToProps = (state: AppState) => ({
 const Board = ({ boardSquares }: Props) => {
   return (
     <div className="Board">
-      {boardSquares?.map((row) => (
-        <SquareRow row={row} />
+      {boardSquares?.map((row, index) => (
+        <SquareRow key={index} row={row} rowIndex={index} />
       ))}
     </div>
   );
