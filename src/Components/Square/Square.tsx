@@ -31,6 +31,22 @@ const mapDispatchToProps = (dispatch: any) => ({
   },
 });
 
+const getThingToShow = ({
+  content,
+  uncoveredState,
+}: {
+  content: SquareContent;
+  uncoveredState: SquareState;
+}): string => {
+  if (uncoveredState === SquareState.Flagged) return "F";
+  if (uncoveredState === SquareState.Unclicked) return "";
+  if (uncoveredState === SquareState.Clicked) {
+    if (content === SquareContent.Nothing) return "";
+    if (content === SquareContent.Mine) return "*";
+  }
+  return "";
+};
+
 const Square = ({
   onClickSquare,
   content,
@@ -42,6 +58,10 @@ const Square = ({
     <button
       type="button"
       className="Square"
+      disabled={
+        uncoveredState === SquareState.Flagged ||
+        uncoveredState === SquareState.Clicked
+      }
       onClick={() =>
         onClickSquare({
           rowIndex,
@@ -49,7 +69,7 @@ const Square = ({
         })
       }
     >
-      {uncoveredState === SquareState.Clicked ? content : ""}
+      {getThingToShow({ content, uncoveredState })}
     </button>
   );
 };
