@@ -6,22 +6,34 @@ import {
 import "./Square.scss";
 import { squareWasClicked } from "../../Redux/reducers/board/events";
 import { connect } from "react-redux";
+import { AppState } from "../../Redux/AppState";
+import { selectors } from "../../Redux/reducers/board/board";
+import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
 
 interface SquareCoords {
   rowIndex: number;
   colIndex: number;
 }
 
-interface Props {
+interface OwnProps {
   content: SquareContent;
   uncoveredState: SquareState;
   rowIndex: number;
   colIndex: number;
+}
+
+interface DispatchProps {
   onClickSquare: (coords: SquareCoords) => void;
 }
 
-const mapDispatchToProps = (dispatch: any) => ({
-  onClickSquare: ({ rowIndex, colIndex }: SquareCoords) => {
+interface StateProps {
+  minesAroundSquare: number;
+}
+
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<AppState, {}, AnyAction>
+): DispatchProps => ({
+  onClickSquare: ({ rowIndex, colIndex }: SquareCoords): void => {
     dispatch(
       squareWasClicked({
         iIndex: rowIndex,
@@ -31,21 +43,32 @@ const mapDispatchToProps = (dispatch: any) => ({
   },
 });
 
+const mapStateToProps = (state: AppState, ownProps: OwnProps) => ({
+  minesAroundSquare: selectors.minesAroundSquare(state)({
+    iIndex: ownProps.rowIndex,
+    jIndex: ownProps.colIndex,
+  }),
+});
+
 const getThingToShow = ({
   content,
   uncoveredState,
+  minesAroundSquare,
 }: {
   content: SquareContent;
   uncoveredState: SquareState;
+  minesAroundSquare: number;
 }): string => {
   if (uncoveredState === SquareState.Flagged) return "F";
   if (uncoveredState === SquareState.Unclicked) return "";
   if (uncoveredState === SquareState.Clicked) {
-    if (content === SquareContent.Nothing) return "";
+    if (content === SquareContent.Nothing) return String(minesAroundSquare);
     if (content === SquareContent.Mine) return "*";
   }
   return "";
 };
+
+type Props = OwnProps & DispatchProps & StateProps;
 
 const Square = ({
   onClickSquare,
@@ -53,6 +76,7 @@ const Square = ({
   uncoveredState,
   rowIndex,
   colIndex,
+  minesAroundSquare,
 }: Props) => {
   return (
     <button
@@ -69,9 +93,12 @@ const Square = ({
         })
       }
     >
-      {getThingToShow({ content, uncoveredState })}
+      {getThingToShow({ content, uncoveredState, minesAroundSquare })}
     </button>
   );
 };
 
-export default connect(null, mapDispatchToProps)(Square);
+export default connect<StateProps, DispatchProps, OwnProps, AppState>(
+  mapStateToProps,
+  mapDispatchToProps
+)(Square);

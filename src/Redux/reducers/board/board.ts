@@ -61,10 +61,35 @@ export const board = createSlice({
   },
 });
 
+const isValidSquareIndex = ({ i, j }: { i: number; j: number }): boolean => {
+  return (
+    i >= 0 && j >= 0 && i < BOARD_DIMENSIONS.ROWS && j < BOARD_DIMENSIONS.COLS
+  );
+};
+
+const getMinesAroundSquare = (state: AppState) => (
+  index: SquareIndex
+): number => {
+  const board = state[SLICE_IDENTIFIERS.BOARD].squares;
+  let minesAmount = 0;
+  for (let i: number = -1; i < 2; i++) {
+    for (let j: number = -1; j < 2; j++) {
+      if (isValidSquareIndex({ i: index.iIndex + i, j: index.jIndex + j })) {
+        const square = board[index.iIndex + i][index.jIndex + j];
+        if (square.content === SquareContent.Mine) {
+          minesAmount++;
+        }
+      }
+    }
+  }
+  return minesAmount;
+};
+
 export const selectors = {
   board: (state: AppState) => {
     return state[SLICE_IDENTIFIERS.BOARD].squares;
   },
   square: (state: AppState) => (index: SquareIndex) =>
     state[SLICE_IDENTIFIERS.BOARD].squares[index.iIndex][index.jIndex],
+  minesAroundSquare: (state: AppState) => getMinesAroundSquare(state),
 };
