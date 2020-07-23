@@ -51,12 +51,19 @@ export const board = createSlice({
   reducers: {
     clickSquare: (state: BoardState, { payload }: { payload: SquareIndex }) => {
       const { squares } = state;
-      squares[payload.iIndex][payload.jIndex].state = SquareState.Clicked;
+      const square = squares[payload.iIndex][payload.jIndex];
+      if (square.state !== SquareState.Flagged)
+        square.state = SquareState.Clicked;
       // TODO: Free surrounding squares if the square doesn't have a bomb
     },
-    flagSquare: (state: BoardState, { payload }: { payload: SquareIndex }) => {
+    toggleFlag: (state: BoardState, { payload }: { payload: SquareIndex }) => {
       const { squares } = state;
-      // TODO
+      const square = squares[payload.iIndex][payload.jIndex];
+      if (square.state === SquareState.Flagged) {
+        square.state = SquareState.Unclicked;
+      } else if (square.state === SquareState.Unclicked) {
+        square.state = SquareState.Flagged;
+      }
     },
   },
 });

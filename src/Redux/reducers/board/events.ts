@@ -12,3 +12,9 @@ export const squareWasClicked = (index: SquareIndex) => async (
   const hadBomb = square.content === SquareContent.Mine;
   if (hadBomb) dispatch(loseGame());
 };
+
+export const squareFlagWasToggled = (index: SquareIndex) => async (
+  dispatch: Function
+) => {
+  dispatch(board.actions.toggleFlag(index));
+};

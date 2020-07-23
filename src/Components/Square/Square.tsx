@@ -4,7 +4,10 @@ import {
   SquareContent,
 } from "../../Redux/reducers/board/board-interfaces";
 import "./Square.scss";
-import { squareWasClicked } from "../../Redux/reducers/board/events";
+import {
+  squareWasClicked,
+  squareFlagWasToggled,
+} from "../../Redux/reducers/board/events";
 import { connect } from "react-redux";
 import { AppState } from "../../Redux/AppState";
 import { selectors } from "../../Redux/reducers/board/board";
@@ -23,7 +26,8 @@ interface OwnProps {
 }
 
 interface DispatchProps {
-  onClickSquare: (coords: SquareCoords) => void;
+  onClick: (coords: SquareCoords) => void;
+  onRightClick: (coords: SquareCoords) => void;
 }
 
 interface StateProps {
@@ -33,9 +37,17 @@ interface StateProps {
 const mapDispatchToProps = (
   dispatch: ThunkDispatch<AppState, {}, AnyAction>
 ): DispatchProps => ({
-  onClickSquare: ({ rowIndex, colIndex }: SquareCoords): void => {
+  onClick: ({ rowIndex, colIndex }: SquareCoords): void => {
     dispatch(
       squareWasClicked({
+        iIndex: rowIndex,
+        jIndex: colIndex,
+      })
+    );
+  },
+  onRightClick: ({ rowIndex, colIndex }: SquareCoords): void => {
+    dispatch(
+      squareFlagWasToggled({
         iIndex: rowIndex,
         jIndex: colIndex,
       })
@@ -59,11 +71,11 @@ const getThingToShow = ({
   uncoveredState: SquareState;
   minesAroundSquare: number;
 }): string => {
-  if (uncoveredState === SquareState.Flagged) return "F";
+  if (uncoveredState === SquareState.Flagged) return "🚩";
   if (uncoveredState === SquareState.Unclicked) return "";
   if (uncoveredState === SquareState.Clicked) {
     if (content === SquareContent.Nothing) return String(minesAroundSquare);
-    if (content === SquareContent.Mine) return "*";
+    if (content === SquareContent.Mine) return "💣";
   }
   return "";
 };
@@ -71,7 +83,8 @@ const getThingToShow = ({
 type Props = OwnProps & DispatchProps & StateProps;
 
 const Square = ({
-  onClickSquare,
+  onClick,
+  onRightClick,
   content,
   uncoveredState,
   rowIndex,
@@ -82,16 +95,20 @@ const Square = ({
     <button
       type="button"
       className="Square"
-      disabled={
-        uncoveredState === SquareState.Flagged ||
-        uncoveredState === SquareState.Clicked
-      }
+      disabled={uncoveredState === SquareState.Clicked}
       onClick={() =>
-        onClickSquare({
+        onClick({
           rowIndex,
           colIndex,
         })
       }
+      onContextMenu={(e) => {
+        e.preventDefault();
+        onRightClick({
+          rowIndex,
+          colIndex,
+        });
+      }}
     >
       {getThingToShow({ content, uncoveredState, minesAroundSquare })}
     </button>
