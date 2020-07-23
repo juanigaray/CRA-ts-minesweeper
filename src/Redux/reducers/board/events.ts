@@ -1,7 +1,7 @@
 import { board, selectors } from "./board";
 import { SquareIndex, SquareContent } from "./board-interfaces";
 import { AppState } from "../../AppState";
-import { loseGame } from "../game/events";
+import { loseGame, checkVictory } from "../game/events";
 
 export const squareWasClicked = (index: SquareIndex) => async (
   dispatch: Function,
@@ -11,6 +11,8 @@ export const squareWasClicked = (index: SquareIndex) => async (
   const square = selectors.square(getState())(index);
   const hadBomb = square.content === SquareContent.Mine;
   if (hadBomb) dispatch(loseGame());
+  const squareMatrix = selectors.board(getState());
+  dispatch(checkVictory(squareMatrix));
 };
 
 export const squareFlagWasToggled = (index: SquareIndex) => async (

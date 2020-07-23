@@ -13,6 +13,9 @@ export const game = createSlice({
     loseGame: (state: GameState) => {
       state.gameStatus = GameStatus.Lost;
     },
+    winGame: (state: GameState) => {
+      state.gameStatus = GameStatus.Won;
+    },
   },
 });
 

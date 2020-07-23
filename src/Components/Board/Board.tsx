@@ -23,6 +23,7 @@ const getStatusIndicator = (
   mouseIsBeingPressed: boolean
 ) => {
   if (gameStatus === GameStatus.Lost) return "😵";
+  if (gameStatus === GameStatus.Won) return "😎";
   if (mouseIsBeingPressed) return "😮";
   return "🙂";
 };
