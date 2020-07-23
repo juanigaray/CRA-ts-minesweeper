@@ -1,4 +1,4 @@
 export const BOARD_DIMENSIONS = {
-  ROWS: 20,
-  COLS: 20,
+  ROWS: 10,
+  COLS: 10,
 };

@@ -1,6 +1,39 @@
+@import "../../Styles/Colors.scss";
+
 .Square {
   width: 30px;
   height: 30px;
   margin: 0;
   padding: 0;
+  background-color: $button_color;
+  &:active {
+    background-color: $button_pressed;
+  }
+  &:disabled {
+    background-color: transparent;
+  }
+  &.blue {
+    color: #000af8;
+  }
+  &.green {
+    color: #008400;
+  }
+  &.red {
+    color: #ff0200;
+  }
+  &.darkBlue {
+    color: #04096d;
+  }
+  &.bordeaux {
+    color: #7c0201;
+  }
+  &.aquamarine {
+    color: #117b79;
+  }
+  &.violet {
+    color: #7e027c;
+  }
+  &.black {
+    color: black;
+  }
 }

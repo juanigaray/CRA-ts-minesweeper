@@ -1,2 +1,18 @@
+@import "../../Styles/Colors.scss";
+
 .Board {
+  display: flex;
+  flex-direction: column;
+  background-color: $grey_background;
+  padding: 1rem;
+  > .BoardHeader {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    > .GameTitle {
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+  }
 }

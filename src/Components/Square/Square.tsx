@@ -8,10 +8,12 @@ import {
   squareWasClicked,
   squareFlagWasToggled,
 } from "../../Redux/reducers/board/events";
+import { selectors as gameSelectors } from "../../Redux/reducers/game/game";
 import { connect } from "react-redux";
 import { AppState } from "../../Redux/AppState";
 import { selectors } from "../../Redux/reducers/board/board";
 import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
+import { GameStatus } from "../../Redux/reducers/game/game-interfaces";
 
 interface SquareCoords {
   rowIndex: number;
@@ -32,6 +34,7 @@ interface DispatchProps {
 
 interface StateProps {
   minesAroundSquare: number;
+  gameStatus: GameStatus;
 }
 
 const mapDispatchToProps = (
@@ -60,6 +63,7 @@ const mapStateToProps = (state: AppState, ownProps: OwnProps) => ({
     iIndex: ownProps.rowIndex,
     jIndex: ownProps.colIndex,
   }),
+  gameStatus: gameSelectors.gameStatus(state),
 });
 
 const getThingToShow = ({
@@ -71,11 +75,37 @@ const getThingToShow = ({
   uncoveredState: SquareState;
   minesAroundSquare: number;
 }): string => {
-  if (uncoveredState === SquareState.Flagged) return "🚩";
   if (uncoveredState === SquareState.Unclicked) return "";
+  if (uncoveredState === SquareState.Flagged) return "🚩";
   if (uncoveredState === SquareState.Clicked) {
-    if (content === SquareContent.Nothing) return String(minesAroundSquare);
     if (content === SquareContent.Mine) return "💣";
+    if (content === SquareContent.Nothing) return String(minesAroundSquare);
+  }
+  return "";
+};
+
+const classnamesByContent: {
+  [x: string]: string;
+} = {
+  "1": "blue",
+  "2": "green",
+  "3": "red",
+  "4": "darkBlue",
+  "5": "bordeaux",
+  "6": "aquamarine",
+  "7": "violet",
+  "8": "black",
+};
+
+const getClassnameByContentToShow = ({
+  content,
+  squareState,
+}: {
+  content: string;
+  squareState: SquareState;
+}) => {
+  if (squareState === SquareState.Clicked) {
+    return classnamesByContent[content] || "";
   }
   return "";
 };
@@ -90,12 +120,23 @@ const Square = ({
   rowIndex,
   colIndex,
   minesAroundSquare,
+  gameStatus,
 }: Props) => {
+  const contentToShow = getThingToShow({
+    content,
+    uncoveredState,
+    minesAroundSquare,
+  });
   return (
     <button
       type="button"
-      className="Square"
-      disabled={uncoveredState === SquareState.Clicked}
+      className={`Square ${getClassnameByContentToShow({
+        content: contentToShow,
+        squareState: uncoveredState,
+      })}`}
+      disabled={
+        uncoveredState === SquareState.Clicked || gameStatus === GameStatus.Lost
+      }
       onClick={() =>
         onClick({
           rowIndex,
@@ -110,7 +151,7 @@ const Square = ({
         });
       }}
     >
-      {getThingToShow({ content, uncoveredState, minesAroundSquare })}
+      {contentToShow}
     </button>
   );
 };
