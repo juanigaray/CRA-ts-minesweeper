@@ -107,6 +107,7 @@ const getClassnameByContentToShow = ({
   if (squareState === SquareState.Clicked) {
     return `clicked ${classnamesByContent[content] || ""}`;
   }
+  if (squareState === SquareState.Flagged) return "flagged";
   return "";
 };
 

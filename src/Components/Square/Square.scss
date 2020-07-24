@@ -6,12 +6,20 @@
   margin: 0;
   padding: 0;
   background-color: $button_color;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+  border-top: none;
+  border-left: none;
   &:active {
     background-color: $button_pressed;
+    &.flagged {
+      background-color: $button_color;
+    }
   }
   &.clicked {
     background-color: transparent;
   }
+
   &.blue {
     color: #000af8;
   }
