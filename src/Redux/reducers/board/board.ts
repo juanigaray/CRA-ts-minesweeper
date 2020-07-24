@@ -75,6 +75,40 @@ const getRandomMatrix = (): SquareMatrix => {
 
 const SLICE_NAME = "board";
 
+const uncoverSafeSquares = (index: SquareIndex, matrix: SquareMatrix): void => {
+  if (!isValidSquareIndex({ i: index.iIndex, j: index.jIndex })) return;
+  const square = matrix[index.iIndex][index.jIndex];
+  square.state = SquareState.Clicked;
+  if (square.surroundingBombs === 0) {
+    const surroundingIndices: Array<SquareIndex> = [
+      {
+        iIndex: index.iIndex + 1,
+        jIndex: index.jIndex,
+      },
+      {
+        iIndex: index.iIndex - 1,
+        jIndex: index.jIndex,
+      },
+      {
+        iIndex: index.iIndex,
+        jIndex: index.jIndex + 1,
+      },
+      {
+        iIndex: index.iIndex,
+        jIndex: index.jIndex - 1,
+      },
+    ].filter(({ iIndex, jIndex }) =>
+      isValidSquareIndex({ i: iIndex, j: jIndex })
+    );
+    surroundingIndices.forEach((surrIndex) => {
+      const surrSq = matrix[surrIndex.iIndex][surrIndex.jIndex];
+      if (surrSq.state !== SquareState.Clicked) {
+        uncoverSafeSquares(surrIndex, matrix);
+      }
+    });
+  }
+};
+
 export const board = createSlice({
   name: SLICE_NAME,
   initialState: {
@@ -86,7 +120,9 @@ export const board = createSlice({
       const square = squares[payload.iIndex][payload.jIndex];
       if (square.state !== SquareState.Flagged) {
         square.state = SquareState.Clicked;
-        //  Free surrounding squares if the square doesn't have a bomb
+        if (square.surroundingBombs === 0) {
+          uncoverSafeSquares(payload, squares);
+        }
       }
     },
     toggleFlag: (state: BoardState, { payload }: { payload: SquareIndex }) => {
