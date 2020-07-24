@@ -9,7 +9,7 @@
   &:active {
     background-color: $button_pressed;
   }
-  &:disabled {
+  &.clicked {
     background-color: transparent;
   }
   &.blue {

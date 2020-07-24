@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import shuffle from "lodash.shuffle";
 import {
   SquareMatrix,
   BoardState,
@@ -11,23 +12,27 @@ import {
 import { BOARD_DIMENSIONS } from "../../../Constants/BoardDimensions";
 import { AppState, SLICE_IDENTIFIERS } from "../../AppState";
 
-const getRandomSquare = (): Square => ({
+const getInitialSquare = () => ({
   content: SquareContent.Nothing,
   state: SquareState.Unclicked,
 });
 
-const getRandomRow = (): SquareRow => {
-  const arr: SquareRow = [];
-  for (let i = 0; i < BOARD_DIMENSIONS.COLS; i++) {
-    arr.push(getRandomSquare());
-  }
-  return arr;
-};
-
 const getRandomMatrix = (): SquareMatrix => {
+  let allSquares: Array<Square> = [];
+  for (let i = 0; i < BOARD_DIMENSIONS.ROWS * BOARD_DIMENSIONS.COLS; i++) {
+    allSquares.push(getInitialSquare());
+  }
+  for (let j = 0; j < BOARD_DIMENSIONS.TOTAL_MINES; j++) {
+    allSquares[j].content = SquareContent.Mine;
+  }
+  allSquares = shuffle(allSquares);
   const matrix: SquareMatrix = [];
   for (let i = 0; i < BOARD_DIMENSIONS.ROWS; i++) {
-    matrix.push(getRandomRow());
+    const arr: SquareRow = [];
+    for (let j = 0; j < BOARD_DIMENSIONS.COLS; j++) {
+      arr.push(allSquares.pop() as Square);
+    }
+    matrix.push(arr);
   }
   return matrix;
 };

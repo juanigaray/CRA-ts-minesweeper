@@ -105,7 +105,7 @@ const getClassnameByContentToShow = ({
   squareState: SquareState;
 }) => {
   if (squareState === SquareState.Clicked) {
-    return classnamesByContent[content] || "";
+    return `clicked ${classnamesByContent[content] || ""}`;
   }
   return "";
 };
@@ -127,13 +127,15 @@ const Square = ({
     uncoveredState,
     minesAroundSquare,
   });
+  const fullClassname = `Square ${getClassnameByContentToShow({
+    content: contentToShow,
+    squareState: uncoveredState,
+  })}`;
+
   return (
     <button
       type="button"
-      className={`Square ${getClassnameByContentToShow({
-        content: contentToShow,
-        squareState: uncoveredState,
-      })}`}
+      className={fullClassname}
       disabled={
         uncoveredState === SquareState.Clicked || gameStatus === GameStatus.Lost
       }

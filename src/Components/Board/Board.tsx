@@ -34,7 +34,9 @@ const Board = ({ boardSquares, gameStatus }: Props) => {
   return (
     <div
       className="Board"
-      onMouseDown={() => setMouseIsBeingPressed(true)}
+      onMouseDown={(e) => {
+        setMouseIsBeingPressed(true);
+      }}
       onMouseUp={() => setMouseIsBeingPressed(false)}
     >
       <header className="BoardHeader">
