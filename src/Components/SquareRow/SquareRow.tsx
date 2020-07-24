@@ -16,6 +16,7 @@ const SquareRow = ({ row, rowIndex }: Props) => {
           key={index}
           content={square.content}
           uncoveredState={square.state}
+          minesAround={square.surroundingBombs}
           rowIndex={rowIndex}
           colIndex={index}
         />

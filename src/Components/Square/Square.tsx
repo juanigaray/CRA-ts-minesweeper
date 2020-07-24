@@ -11,7 +11,6 @@ import {
 import { selectors as gameSelectors } from "../../Redux/reducers/game/game";
 import { connect } from "react-redux";
 import { AppState } from "../../Redux/AppState";
-import { selectors } from "../../Redux/reducers/board/board";
 import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
 import { GameStatus } from "../../Redux/reducers/game/game-interfaces";
 
@@ -25,6 +24,7 @@ interface OwnProps {
   uncoveredState: SquareState;
   rowIndex: number;
   colIndex: number;
+  minesAround: number;
 }
 
 interface DispatchProps {
@@ -33,7 +33,6 @@ interface DispatchProps {
 }
 
 interface StateProps {
-  minesAroundSquare: number;
   gameStatus: GameStatus;
 }
 
@@ -59,10 +58,6 @@ const mapDispatchToProps = (
 });
 
 const mapStateToProps = (state: AppState, ownProps: OwnProps) => ({
-  minesAroundSquare: selectors.minesAroundSquare(state)({
-    iIndex: ownProps.rowIndex,
-    jIndex: ownProps.colIndex,
-  }),
   gameStatus: gameSelectors.gameStatus(state),
 });
 
@@ -120,13 +115,13 @@ const Square = ({
   uncoveredState,
   rowIndex,
   colIndex,
-  minesAroundSquare,
   gameStatus,
+  minesAround,
 }: Props) => {
   const contentToShow = getThingToShow({
     content,
     uncoveredState,
-    minesAroundSquare,
+    minesAroundSquare: minesAround,
   });
   const fullClassname = `Square ${getClassnameByContentToShow({
     content: contentToShow,

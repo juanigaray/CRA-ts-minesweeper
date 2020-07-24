@@ -17,6 +17,7 @@ export interface SquareIndex {
 export interface Square {
   content: SquareContent;
   state: SquareState;
+  surroundingBombs: number;
 }
 
 export type SquareRow = Array<Square>;
