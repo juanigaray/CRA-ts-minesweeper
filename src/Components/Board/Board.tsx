@@ -7,9 +7,18 @@ import { connect } from "react-redux";
 import SquareRow from "../SquareRow/SquareRow";
 import { AppState } from "../../Redux/AppState";
 import { GameStatus } from "../../Redux/reducers/game/game-interfaces";
+import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
+import { startOver } from "../../Redux/reducers/game/events";
 
-interface Props {
+interface OwnProps {
   boardSquares: SquareMatrix;
+}
+
+interface DispatchProps {
+  onStatusClick: () => void;
+}
+
+interface StateProps {
   gameStatus: GameStatus;
 }
 
@@ -28,7 +37,17 @@ const getStatusIndicator = (
   return "🙂";
 };
 
-const Board = ({ boardSquares, gameStatus }: Props) => {
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<AppState, {}, AnyAction>
+): DispatchProps => ({
+  onStatusClick: () => {
+    dispatch(startOver())
+  },
+});
+
+type Props = StateProps & DispatchProps & OwnProps;
+
+const Board = ({ boardSquares, gameStatus, onStatusClick }: Props) => {
   const [mouseIsBeingPressed, setMouseIsBeingPressed] = useState(false);
   const statusIndicator = getStatusIndicator(gameStatus, mouseIsBeingPressed);
   return (
@@ -41,7 +60,7 @@ const Board = ({ boardSquares, gameStatus }: Props) => {
     >
       <header className="BoardHeader">
         <h5 className="GameTitle">MINESWEEPER</h5>
-        {statusIndicator}
+        <button className="GameStatus" onClick={onStatusClick}>{statusIndicator}</button>
       </header>
       {boardSquares?.map((row, index) => (
         <SquareRow key={index} row={row} rowIndex={index} />
@@ -50,4 +69,7 @@ const Board = ({ boardSquares, gameStatus }: Props) => {
   );
 };
 
-export default connect(mapStateToProps)(Board);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Board);

@@ -10,9 +10,17 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 1rem;
+    align-items: center;
     > .GameTitle {
       margin-top: 0;
       margin-bottom: 1rem;
+    }
+    > .GameStatus {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      outline: inherit;
     }
   }
 }

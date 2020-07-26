@@ -134,6 +134,9 @@ export const board = createSlice({
         square.state = SquareState.Flagged;
       }
     },
+    restartBoard: (state: BoardState) => {
+      state.squares = getRandomMatrix();
+    },
   },
 });
 
