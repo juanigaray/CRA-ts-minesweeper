@@ -1,4 +1,5 @@
 import { game } from "./game";
+import { board } from "../board/board";
 import {
   SquareMatrix,
   SquareContent,
@@ -10,9 +11,9 @@ export const loseGame = () => async (dispatch: Function) => {
   dispatch(game.actions.loseGame());
 };
 
-export const startOver = () => async () => {
-  // todo
-  return null;
+export const startOver = () => async (dispatch: Function) => {
+  dispatch(game.actions.restartGame());
+  dispatch(board.actions.restartBoard());
 };
 
 export const checkVictory = (board: SquareMatrix) => async (
