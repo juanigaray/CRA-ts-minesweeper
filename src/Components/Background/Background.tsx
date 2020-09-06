@@ -5,8 +5,10 @@ interface Props {
   children: React.ReactNode;
 }
 
-const Background = ({ children }: Props) => (
+const Background: React.FC<Props> = ({ children }: Props) => (
   <div className="Background">{children}</div>
 );
+
+Background.propTypes = {};
 
 export default Background;

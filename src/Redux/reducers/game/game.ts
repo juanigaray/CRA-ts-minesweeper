@@ -7,7 +7,7 @@ const SLICE_NAME = "game";
 export const game = createSlice({
   name: SLICE_NAME,
   initialState: {
-    gameStatus: GameStatus.Playing,
+    gameStatus: GameStatus.Playing
   },
   reducers: {
     loseGame: (state: GameState) => {
@@ -18,8 +18,8 @@ export const game = createSlice({
     },
     restartGame: (state: GameState) => {
       state.gameStatus = GameStatus.Playing;
-    },
-  },
+    }
+  }
 });
 
 export const selectors = {
@@ -28,5 +28,5 @@ export const selectors = {
   },
   gameStatus: (state: AppState) => {
     return state[SLICE_IDENTIFIERS.GAME].gameStatus;
-  },
+  }
 };

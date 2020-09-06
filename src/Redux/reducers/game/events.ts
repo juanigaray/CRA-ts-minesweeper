@@ -3,7 +3,7 @@ import { board } from "../board/board";
 import {
   SquareMatrix,
   SquareContent,
-  SquareState,
+  SquareState
 } from "../board/board-interfaces";
 import { selectors } from "./game";
 
@@ -23,8 +23,8 @@ export const checkVictory = (board: SquareMatrix) => async (
   const hasLost = selectors.gameWasLost(getState());
   if (hasLost) return;
 
-  for (let squareRow of board) {
-    for (let square of squareRow) {
+  for (const squareRow of board) {
+    for (const square of squareRow) {
       if (
         square.content === SquareContent.Nothing &&
         square.state !== SquareState.Clicked

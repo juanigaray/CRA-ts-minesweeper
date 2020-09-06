@@ -7,7 +7,7 @@ import {
   SquareState,
   SquareContent,
   Square,
-  SquareRow,
+  SquareRow
 } from "./board-interfaces";
 import { BOARD_DIMENSIONS } from "../../../Constants/BoardDimensions";
 import { AppState, SLICE_IDENTIFIERS } from "../../AppState";
@@ -15,7 +15,7 @@ import { AppState, SLICE_IDENTIFIERS } from "../../AppState";
 const getInitialSquare = (): Square => ({
   content: SquareContent.Nothing,
   state: SquareState.Unclicked,
-  surroundingBombs: 0,
+  surroundingBombs: 0
 });
 
 const isValidSquareIndex = ({ i, j }: { i: number; j: number }): boolean => {
@@ -29,8 +29,8 @@ const getMinesAroundSquare = (
   index: SquareIndex
 ): number => {
   let minesAmount = 0;
-  for (let i: number = -1; i < 2; i++) {
-    for (let j: number = -1; j < 2; j++) {
+  for (let i = -1; i < 2; i++) {
+    for (let j = -1; j < 2; j++) {
       if (isValidSquareIndex({ i: index.iIndex + i, j: index.jIndex + j })) {
         const square = board[index.iIndex + i][index.jIndex + j];
         if (square.content === SquareContent.Mine) {
@@ -65,7 +65,7 @@ const getRandomMatrix = (): SquareMatrix => {
       const square = matrix[i][j];
       square.surroundingBombs = getMinesAroundSquare(matrix, {
         iIndex: i,
-        jIndex: j,
+        jIndex: j
       });
     }
   }
@@ -83,24 +83,24 @@ const uncoverSafeSquares = (index: SquareIndex, matrix: SquareMatrix): void => {
     const surroundingIndices: Array<SquareIndex> = [
       {
         iIndex: index.iIndex + 1,
-        jIndex: index.jIndex,
+        jIndex: index.jIndex
       },
       {
         iIndex: index.iIndex - 1,
-        jIndex: index.jIndex,
+        jIndex: index.jIndex
       },
       {
         iIndex: index.iIndex,
-        jIndex: index.jIndex + 1,
+        jIndex: index.jIndex + 1
       },
       {
         iIndex: index.iIndex,
-        jIndex: index.jIndex - 1,
-      },
+        jIndex: index.jIndex - 1
+      }
     ].filter(({ iIndex, jIndex }) =>
       isValidSquareIndex({ i: iIndex, j: jIndex })
     );
-    surroundingIndices.forEach((surrIndex) => {
+    surroundingIndices.forEach(surrIndex => {
       const surrSq = matrix[surrIndex.iIndex][surrIndex.jIndex];
       if (surrSq.state !== SquareState.Clicked) {
         uncoverSafeSquares(surrIndex, matrix);
@@ -112,7 +112,7 @@ const uncoverSafeSquares = (index: SquareIndex, matrix: SquareMatrix): void => {
 export const board = createSlice({
   name: SLICE_NAME,
   initialState: {
-    squares: getRandomMatrix(),
+    squares: getRandomMatrix()
   },
   reducers: {
     clickSquare: (state: BoardState, { payload }: { payload: SquareIndex }) => {
@@ -136,8 +136,8 @@ export const board = createSlice({
     },
     restartBoard: (state: BoardState) => {
       state.squares = getRandomMatrix();
-    },
-  },
+    }
+  }
 });
 
 export const selectors = {
@@ -145,5 +145,5 @@ export const selectors = {
     return state[SLICE_IDENTIFIERS.BOARD].squares;
   },
   square: (state: AppState) => (index: SquareIndex) =>
-    state[SLICE_IDENTIFIERS.BOARD].squares[index.iIndex][index.jIndex],
+    state[SLICE_IDENTIFIERS.BOARD].squares[index.iIndex][index.jIndex]
 };

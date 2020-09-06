@@ -1,7 +1,7 @@
 export enum GameStatus {
   Lost,
   Playing,
-  Won,
+  Won
 }
 
 export interface GameState {

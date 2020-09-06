@@ -3,7 +3,7 @@ import { GameState } from "./reducers/game/game-interfaces";
 
 export enum SLICE_IDENTIFIERS {
   BOARD,
-  GAME,
+  GAME
 }
 
 export interface AppState {

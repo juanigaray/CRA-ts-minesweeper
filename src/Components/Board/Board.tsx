@@ -24,7 +24,7 @@ interface StateProps {
 
 const mapStateToProps = (state: AppState) => ({
   boardSquares: selectors.board(state),
-  gameStatus: gameSelectors.gameStatus(state),
+  gameStatus: gameSelectors.gameStatus(state)
 });
 
 const getStatusIndicator = (
@@ -38,29 +38,37 @@ const getStatusIndicator = (
 };
 
 const mapDispatchToProps = (
-  dispatch: ThunkDispatch<AppState, {}, AnyAction>
+  dispatch: ThunkDispatch<AppState, unknown, AnyAction>
 ): DispatchProps => ({
   onStatusClick: () => {
-    dispatch(startOver())
-  },
+    dispatch(startOver());
+  }
 });
 
 type Props = StateProps & DispatchProps & OwnProps;
 
-const Board = ({ boardSquares, gameStatus, onStatusClick }: Props) => {
+const Board: React.FC<Props> = ({
+  boardSquares,
+  gameStatus,
+  onStatusClick
+}: Props) => {
   const [mouseIsBeingPressed, setMouseIsBeingPressed] = useState(false);
   const statusIndicator = getStatusIndicator(gameStatus, mouseIsBeingPressed);
   return (
     <div
+      role="button"
+      tabIndex={0}
       className="Board"
-      onMouseDown={(e) => {
+      onMouseDown={() => {
         setMouseIsBeingPressed(true);
       }}
       onMouseUp={() => setMouseIsBeingPressed(false)}
     >
       <header className="BoardHeader">
         <h5 className="GameTitle">MINESWEEPER</h5>
-        <button className="GameStatus" onClick={onStatusClick}>{statusIndicator}</button>
+        <button className="GameStatus" onClick={onStatusClick}>
+          {statusIndicator}
+        </button>
       </header>
       {boardSquares?.map((row, index) => (
         <SquareRow key={index} row={row} rowIndex={index} />
@@ -69,7 +77,4 @@ const Board = ({ boardSquares, gameStatus, onStatusClick }: Props) => {
   );
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Board);
+export default connect(mapStateToProps, mapDispatchToProps)(Board);

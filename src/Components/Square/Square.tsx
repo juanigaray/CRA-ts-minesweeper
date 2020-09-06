@@ -1,12 +1,12 @@
 import React from "react";
 import {
   SquareState,
-  SquareContent,
+  SquareContent
 } from "../../Redux/reducers/board/board-interfaces";
 import "./Square.scss";
 import {
   squareWasClicked,
-  squareFlagWasToggled,
+  squareFlagWasToggled
 } from "../../Redux/reducers/board/events";
 import { selectors as gameSelectors } from "../../Redux/reducers/game/game";
 import { connect } from "react-redux";
@@ -37,13 +37,13 @@ interface StateProps {
 }
 
 const mapDispatchToProps = (
-  dispatch: ThunkDispatch<AppState, {}, AnyAction>
+  dispatch: ThunkDispatch<AppState, unknown, AnyAction>
 ): DispatchProps => ({
   onClick: ({ rowIndex, colIndex }: SquareCoords): void => {
     dispatch(
       squareWasClicked({
         iIndex: rowIndex,
-        jIndex: colIndex,
+        jIndex: colIndex
       })
     );
   },
@@ -51,20 +51,20 @@ const mapDispatchToProps = (
     dispatch(
       squareFlagWasToggled({
         iIndex: rowIndex,
-        jIndex: colIndex,
+        jIndex: colIndex
       })
     );
-  },
+  }
 });
 
-const mapStateToProps = (state: AppState, ownProps: OwnProps) => ({
-  gameStatus: gameSelectors.gameStatus(state),
+const mapStateToProps = (state: AppState) => ({
+  gameStatus: gameSelectors.gameStatus(state)
 });
 
 const getThingToShow = ({
   content,
   uncoveredState,
-  minesAroundSquare,
+  minesAroundSquare
 }: {
   content: SquareContent;
   uncoveredState: SquareState;
@@ -89,12 +89,12 @@ const classnamesByContent: {
   "5": "bordeaux",
   "6": "aquamarine",
   "7": "violet",
-  "8": "black",
+  "8": "black"
 };
 
 const getClassnameByContentToShow = ({
   content,
-  squareState,
+  squareState
 }: {
   content: string;
   squareState: SquareState;
@@ -116,16 +116,16 @@ const Square = ({
   rowIndex,
   colIndex,
   gameStatus,
-  minesAround,
+  minesAround
 }: Props) => {
   const contentToShow = getThingToShow({
     content,
     uncoveredState,
-    minesAroundSquare: minesAround,
+    minesAroundSquare: minesAround
   });
   const fullClassname = `Square ${getClassnameByContentToShow({
     content: contentToShow,
-    squareState: uncoveredState,
+    squareState: uncoveredState
   })}`;
 
   return (
@@ -138,14 +138,14 @@ const Square = ({
       onClick={() =>
         onClick({
           rowIndex,
-          colIndex,
+          colIndex
         })
       }
-      onContextMenu={(e) => {
+      onContextMenu={e => {
         e.preventDefault();
         onRightClick({
           rowIndex,
-          colIndex,
+          colIndex
         });
       }}
     >

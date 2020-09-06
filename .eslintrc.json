@@ -1,0 +1,84 @@
+{
+  "env": {
+    "node": true,
+    "browser": true,
+    "es6": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
+    "prettier",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
+  ],
+  "globals": {
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "import",
+    "react-hooks",
+    "prettier",
+    "no-proptypes-in-ts"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": ["../../.*"]
+      }
+    ],
+    "prettier/prettier": "error",
+    "object-curly-spacing": ["error", "always"],
+    "no-unused-vars": [2, { "args": "after-used", "argsIgnorePattern": "^_" }],
+    "import/newline-after-import": ["error", { "count": 1 }],
+    "require-atomic-updates": "error",
+    "no-dupe-else-if": "error",
+    "prefer-const": "error",
+    "no-var": "error",
+    "jsx-quotes": ["error", "prefer-double"],
+    "no-await-in-loop": ["error"],
+    "no-empty-function": "error",
+    "no-implicit-coercion": "error",
+    "react/jsx-curly-brace-presence": [
+      1,
+      { "props": "never", "children": "never" }
+    ],
+    "react/jsx-no-duplicate-props": [1, { "ignoreCase": false }],
+    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "no-proptypes-in-ts/no-proptypes-in-ts": 2
+  },
+  "overrides": [
+    {
+      // enable the rule specifically for TypeScript files
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": ["error"]
+        //"react/prop-types": "off"
+      }
+    }
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    },
+    "import/resolver": {
+      "node": {
+        "moduleDirectory": ["node_modules", "src/"]
+      }
+    }
+  }
+}

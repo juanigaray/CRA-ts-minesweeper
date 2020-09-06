@@ -8,7 +8,7 @@ interface Props {
   rowIndex: number;
 }
 
-const SquareRow = ({ row, rowIndex }: Props) => {
+const SquareRow: React.FC<Props> = ({ row, rowIndex }: Props) => {
   return (
     <div className="SquareRow">
       {row.map((square, index) => (

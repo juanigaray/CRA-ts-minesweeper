@@ -1,12 +1,12 @@
 export enum SquareContent {
   Nothing,
-  Mine,
+  Mine
 }
 
 export enum SquareState {
   Clicked,
   Unclicked,
-  Flagged,
+  Flagged
 }
 
 export interface SquareIndex {
